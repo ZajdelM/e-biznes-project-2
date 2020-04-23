@@ -13,14 +13,93 @@ GET     /message                    controllers.AsyncController.message
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-#GET  -create
-#POST  -create handle(id)
-#GET  -update(id)
-#PUT  -update handle
-#DELETE  - delete(id)
-#GET  -list
-#GET  -read (id)
+# Address routing
+GET     /address/add                controllers.AddressController.addAddress
+POST    /address/addhandle/:id      controllers.AddressController.addAddressHandle(id: Long)
+GET     /address/update/:id         controllers.AddressController.updateAddress(id: Long)
+PUT     /address/updatehandle       controllers.AddressController.updateAddressHandle
+GET     /address/delete/:id         controllers.AddressController.deleteAddress(id: Long)
+GET     /address/all                controllers.AddressController.getAllAddresses
+GET     /address/:id                controllers.AddressController.getAddress(id: Long)
+
+# Cart routing
+GET     /cart/add                   controllers.CartController.addCart
+POST    /cart/addhandle/:id         controllers.CartController.addCartHandle(id: Long)
+GET     /cart/update/:id            controllers.CartController.updateCart(id: Long)
+PUT     /cart/updatehandle          controllers.CartController.updateCartHandle
+GET     /cart/delete/:id            controllers.CartController.deleteCart(id: Long)
+GET     /cart/all                   controllers.CartController.getAllCarts
+GET     /cart/:id                   controllers.CartController.getCart(id: Long)
+
+# Category routing
+GET     /category/add               controllers.CategoryController.addCategory
+POST    /category/addhandle/:id     controllers.CategoryController.addCategoryHandle(id: Long)
+GET     /category/update/:id        controllers.CategoryController.updateCategory(id: Long)
+PUT     /category/updatehandle      controllers.CategoryController.updateCategoryHandle
+GET     /category/delete/:id        controllers.CategoryController.deleteCategory(id: Long)
+GET     /category/all               controllers.CategoryController.getAllCategories
+GET     /category/:id               controllers.CategoryController.getCategory(id: Long)
+
+# Discount routing
+GET     /discount/add               controllers.DiscountsController.addDiscount
+POST    /discount/addhandle/:id     controllers.DiscountsController.addDiscountHandle(id: Long)
+GET     /discount/update/:id        controllers.DiscountsController.updateDiscount(id: Long)
+PUT     /discount/updatehandle      controllers.DiscountsController.updateDiscountHandle
+GET     /discount/delete/:id        controllers.DiscountsController.deleteDiscount(id: Long)
+GET     /discount/all               controllers.DiscountsController.getAllDiscounts
+GET     /discount/:id               controllers.DiscountsController.getDiscount(id: Long)
+
+# News routing
+GET     /news/add                   controllers.NewsController.addNews
+POST    /news/addhandle/:id         controllers.NewsController.addNewsHandle(id: Long)
+GET     /news/update/:id            controllers.NewsController.updateNews(id: Long)
+PUT     /news/updatehandle          controllers.NewsController.updateNewsHandle
+GET     /news/delete/:id            controllers.NewsController.deleteNews(id: Long)
+GET     /news/all                   controllers.NewsController.getAllNews
+GET     /news/:id                   controllers.NewsController.getNews(id: Long)
+
+# Order routing
+GET     /order/add                  controllers.OrderController.addOrder
+POST    /order/addhandle/:id        controllers.OrderController.addOrderHandle(id: Long)
+GET     /order/update/:id           controllers.OrderController.updateOrder(id: Long)
+PUT     /order/updatehandle         controllers.OrderController.updateOrderHandle
+GET     /order/delete/:id           controllers.OrderController.deleteOrder(id: Long)
+GET     /order/all                  controllers.OrderController.getAllOrders
+GET     /order/:id                  controllers.OrderController.getOrder(id: Long)
+
+# Payment routing
+GET     /payment/add                controllers.PaymentController.addPayment
+POST    /payment/addhandle/:id      controllers.PaymentController.addPaymentHandle(id: Long)
+GET     /payment/update/:id         controllers.PaymentController.updatePayment(id: Long)
+PUT     /payment/updatehandle       controllers.PaymentController.updatePaymentHandle
+GET     /payment/delete/:id         controllers.PaymentController.deletePayment(id: Long)
+GET     /payment/all                controllers.PaymentController.getAllPayments
+GET     /payment/:id                controllers.PaymentController.getPayment(id: Long)
 
 
+# Product routing
+GET     /product/add                controllers.ProductController.addProduct
+POST    /product/addhandle/:id      controllers.ProductController.addProductHandle(id: Long)
+GET     /product/update/:id         controllers.ProductController.updateProduct(id: Long)
+PUT     /product/updatehandle       controllers.ProductController.updateProductHandle
+GET     /product/delete/:id         controllers.ProductController.deleteProduct(id: Long)
+GET     /product/all                controllers.ProductController.getAllProducts
+GET     /product/:id                controllers.ProductController.getProduct(id: Long)
 
-      
+# Shipment routing
+GET     /shipment/add               controllers.ShipmentController.addShipment
+POST    /shipment/addhandle/:id     controllers.ShipmentController.addShipmentHandle(id: Long)
+GET     /shipment/update/:id        controllers.ShipmentController.updateShipment(id: Long)
+PUT     /shipment/updatehandle      controllers.ShipmentController.updateShipmentHandle
+GET     /shipment/delete/:id        controllers.ShipmentController.deleteShipment(id: Long)
+GET     /shipment/all               controllers.ShipmentController.getAllShipments
+GET     /shipment/:id               controllers.ShipmentController.getShipment(id: Long)
+
+# User routing
+GET     /user/add                   controllers.UserController.addUser
+POST    /user/addhandle/:id         controllers.UserController.addUserHandle(id: Long)
+GET     /user/update/:id            controllers.UserController.updateUser(id: Long)
+PUT     /user/updatehandle          controllers.UserController.updateUserHandle
+GET     /user/delete/:id            controllers.UserController.deleteUser(id: Long)
+GET     /user/all                   controllers.UserController.getAllUsers
+GET     /user/:id                   controllers.UserController.getUser(id: Long)

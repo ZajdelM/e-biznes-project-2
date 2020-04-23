@@ -1,10 +1,10 @@
 package controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 @Singleton
-class ShipmentController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class ShipmentController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def addShipment = Action {
     Ok(views.html.index("Your new application is ready."))

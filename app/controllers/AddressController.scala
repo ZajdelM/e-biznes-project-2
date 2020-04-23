@@ -4,10 +4,10 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 @Singleton
-class AddressController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class AddressController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def addAddress = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok("test")
   }
 
   def addAddressHandle(id: Long) = Action {
@@ -34,11 +34,4 @@ class AddressController @Inject()(cc: ControllerComponents) extends AbstractCont
     Ok(views.html.index("asd"))
   }
 
-//  GET  -create
-//  POST  -create handle(id)
-//  GET  -update(id)
-//  PUT  -update handle
-//  DELETE  - delete(id)
-//  GET  -list
-//  GET  -read (id)
 }
