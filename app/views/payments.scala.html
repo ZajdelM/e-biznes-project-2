@@ -1,0 +1,20 @@
+@(payments: Seq[Payment])
+
+<table>
+    <tr>
+        <th id="amount">Amount</th>
+        <th id="method">Method</th>
+        <th id="actions">Actions</th>
+    </tr>
+    @for(payment <- payments) {
+        <tr>
+            <td>@payment.amount</td>
+            <td>@payment.method</td>
+            <td>
+                <a href="@controllers.routes.PaymentController.getPayment(payment.id)">View</a>
+                <a href="@controllers.routes.PaymentController.updatePayment(payment.id)">Update</a>
+                <a href="@controllers.routes.PaymentController.deletePayment(payment.id)">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

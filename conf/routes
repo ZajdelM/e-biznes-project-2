@@ -15,91 +15,91 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 # Address routing
 GET     /address/add                controllers.AddressController.addAddress
-POST    /address/addhandle/:id      controllers.AddressController.addAddressHandle(id: Long)
-GET     /address/update/:id         controllers.AddressController.updateAddress(id: Long)
+POST    /address/addhandle/:id      controllers.AddressController.addAddressHandle(id: Int)
+GET     /address/update/:id         controllers.AddressController.updateAddress(id: Int)
 PUT     /address/updatehandle       controllers.AddressController.updateAddressHandle
-GET     /address/delete/:id         controllers.AddressController.deleteAddress(id: Long)
+GET     /address/delete/:id         controllers.AddressController.deleteAddress(id: Int)
 GET     /address/all                controllers.AddressController.getAllAddresses
-GET     /address/:id                controllers.AddressController.getAddress(id: Long)
+GET     /address/:id                controllers.AddressController.getAddress(id: Int)
 
 # Cart routing
 GET     /cart/add                   controllers.CartController.addCart
-POST    /cart/addhandle/:id         controllers.CartController.addCartHandle(id: Long)
-GET     /cart/update/:id            controllers.CartController.updateCart(id: Long)
+POST    /cart/addhandle/:id         controllers.CartController.addCartHandle(id: Int)
+GET     /cart/update/:id            controllers.CartController.updateCart(id: Int)
 PUT     /cart/updatehandle          controllers.CartController.updateCartHandle
-GET     /cart/delete/:id            controllers.CartController.deleteCart(id: Long)
+GET     /cart/delete/:id            controllers.CartController.deleteCart(id: Int)
 GET     /cart/all                   controllers.CartController.getAllCarts
-GET     /cart/:id                   controllers.CartController.getCart(id: Long)
+GET     /cart/:id                   controllers.CartController.getCart(id: Int)
 
 # Category routing
 GET     /category/add               controllers.CategoryController.addCategory
-POST    /category/addhandle/:id     controllers.CategoryController.addCategoryHandle(id: Long)
-GET     /category/update/:id        controllers.CategoryController.updateCategory(id: Long)
+POST    /category/addhandle/:id     controllers.CategoryController.addCategoryHandle(id: Int)
+GET     /category/update/:id        controllers.CategoryController.updateCategory(id: Int)
 PUT     /category/updatehandle      controllers.CategoryController.updateCategoryHandle
-GET     /category/delete/:id        controllers.CategoryController.deleteCategory(id: Long)
+GET     /category/delete/:id        controllers.CategoryController.deleteCategory(id: Int)
 GET     /category/all               controllers.CategoryController.getAllCategories
-GET     /category/:id               controllers.CategoryController.getCategory(id: Long)
+GET     /category/:id               controllers.CategoryController.getCategory(id: Int)
 
 # Discount routing
-GET     /discount/add               controllers.DiscountsController.addDiscount
-POST    /discount/addhandle/:id     controllers.DiscountsController.addDiscountHandle(id: Long)
-GET     /discount/update/:id        controllers.DiscountsController.updateDiscount(id: Long)
-PUT     /discount/updatehandle      controllers.DiscountsController.updateDiscountHandle
-GET     /discount/delete/:id        controllers.DiscountsController.deleteDiscount(id: Long)
-GET     /discount/all               controllers.DiscountsController.getAllDiscounts
-GET     /discount/:id               controllers.DiscountsController.getDiscount(id: Long)
+GET     /discount/add               controllers.DiscountController.addDiscount
+POST    /discount/addhandle/:id     controllers.DiscountController.addDiscountHandle(id: Int)
+GET     /discount/update/:id        controllers.DiscountController.updateDiscount(id: Int)
+PUT     /discount/updatehandle      controllers.DiscountController.updateDiscountHandle
+GET     /discount/delete/:id        controllers.DiscountController.deleteDiscount(id: Int)
+GET     /discount/all               controllers.DiscountController.getAllDiscounts
+GET     /discount/:id               controllers.DiscountController.getDiscount(id: Int)
 
 # News routing
 GET     /news/add                   controllers.NewsController.addNews
-POST    /news/addhandle/:id         controllers.NewsController.addNewsHandle(id: Long)
-GET     /news/update/:id            controllers.NewsController.updateNews(id: Long)
+POST    /news/addhandle/:id         controllers.NewsController.addNewsHandle(id: Int)
+GET     /news/update/:id            controllers.NewsController.updateNews(id: Int)
 PUT     /news/updatehandle          controllers.NewsController.updateNewsHandle
-GET     /news/delete/:id            controllers.NewsController.deleteNews(id: Long)
+GET     /news/delete/:id            controllers.NewsController.deleteNews(id: Int)
 GET     /news/all                   controllers.NewsController.getAllNews
-GET     /news/:id                   controllers.NewsController.getNews(id: Long)
+GET     /news/:id                   controllers.NewsController.getNews(id: Int)
 
 # Order routing
 GET     /order/add                  controllers.OrderController.addOrder
-POST    /order/addhandle/:id        controllers.OrderController.addOrderHandle(id: Long)
-GET     /order/update/:id           controllers.OrderController.updateOrder(id: Long)
+POST    /order/addhandle/:id        controllers.OrderController.addOrderHandle(id: Int)
+GET     /order/update/:id           controllers.OrderController.updateOrder(id: Int)
 PUT     /order/updatehandle         controllers.OrderController.updateOrderHandle
-GET     /order/delete/:id           controllers.OrderController.deleteOrder(id: Long)
+GET     /order/delete/:id           controllers.OrderController.deleteOrder(id: Int)
 GET     /order/all                  controllers.OrderController.getAllOrders
-GET     /order/:id                  controllers.OrderController.getOrder(id: Long)
+GET     /order/:id                  controllers.OrderController.getOrder(id: Int)
 
 # Payment routing
 GET     /payment/add                controllers.PaymentController.addPayment
-POST    /payment/addhandle/:id      controllers.PaymentController.addPaymentHandle(id: Long)
-GET     /payment/update/:id         controllers.PaymentController.updatePayment(id: Long)
+POST    /payment/addhandle/:id      controllers.PaymentController.addPaymentHandle(id: Int)
+GET     /payment/update/:id         controllers.PaymentController.updatePayment(id: Int)
 PUT     /payment/updatehandle       controllers.PaymentController.updatePaymentHandle
-GET     /payment/delete/:id         controllers.PaymentController.deletePayment(id: Long)
+GET     /payment/delete/:id         controllers.PaymentController.deletePayment(id: Int)
 GET     /payment/all                controllers.PaymentController.getAllPayments
-GET     /payment/:id                controllers.PaymentController.getPayment(id: Long)
+GET     /payment/:id                controllers.PaymentController.getPayment(id: Int)
 
 
 # Product routing
 GET     /product/add                controllers.ProductController.addProduct
-POST    /product/addhandle/:id      controllers.ProductController.addProductHandle(id: Long)
-GET     /product/update/:id         controllers.ProductController.updateProduct(id: Long)
+POST    /product/addhandle/:id      controllers.ProductController.addProductHandle(id: Int)
+GET     /product/update/:id         controllers.ProductController.updateProduct(id: Int)
 PUT     /product/updatehandle       controllers.ProductController.updateProductHandle
-GET     /product/delete/:id         controllers.ProductController.deleteProduct(id: Long)
+GET     /product/delete/:id         controllers.ProductController.deleteProduct(id: Int)
 GET     /product/all                controllers.ProductController.getAllProducts
-GET     /product/:id                controllers.ProductController.getProduct(id: Long)
+GET     /product/:id                controllers.ProductController.getProduct(id: Int)
 
 # Shipment routing
 GET     /shipment/add               controllers.ShipmentController.addShipment
-POST    /shipment/addhandle/:id     controllers.ShipmentController.addShipmentHandle(id: Long)
-GET     /shipment/update/:id        controllers.ShipmentController.updateShipment(id: Long)
+POST    /shipment/addhandle/:id     controllers.ShipmentController.addShipmentHandle(id: Int)
+GET     /shipment/update/:id        controllers.ShipmentController.updateShipment(id: Int)
 PUT     /shipment/updatehandle      controllers.ShipmentController.updateShipmentHandle
-GET     /shipment/delete/:id        controllers.ShipmentController.deleteShipment(id: Long)
+GET     /shipment/delete/:id        controllers.ShipmentController.deleteShipment(id: Int)
 GET     /shipment/all               controllers.ShipmentController.getAllShipments
-GET     /shipment/:id               controllers.ShipmentController.getShipment(id: Long)
+GET     /shipment/:id               controllers.ShipmentController.getShipment(id: Int)
 
-# User routing
-GET     /user/add                   controllers.UserController.addUser
-POST    /user/addhandle/:id         controllers.UserController.addUserHandle(id: Long)
-GET     /user/update/:id            controllers.UserController.updateUser(id: Long)
-PUT     /user/updatehandle          controllers.UserController.updateUserHandle
-GET     /user/delete/:id            controllers.UserController.deleteUser(id: Long)
-GET     /user/all                   controllers.UserController.getAllUsers
-GET     /user/:id                   controllers.UserController.getUser(id: Long)
+# Client routing
+GET     /client/add                   controllers.ClientController.addClient
+POST    /client/addhandle/:id         controllers.ClientController.addClientHandle(id: Int)
+GET     /client/update/:id            controllers.ClientController.updateClient(id: Int)
+PUT     /client/updatehandle          controllers.ClientController.updateClientHandle
+GET     /client/delete/:id            controllers.ClientController.deleteClient(id: Int)
+GET     /client/all                   controllers.ClientController.getAllClients
+GET     /client/:id                   controllers.ClientController.getClient(id: Int)

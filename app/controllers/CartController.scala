@@ -1,20 +1,23 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+import models.CartRepository
 import play.api.mvc.{AbstractController, ControllerComponents}
 
+import scala.concurrent.ExecutionContext
+
 @Singleton
-class CartController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class CartController @Inject()(cc: ControllerComponents, cartRepository: CartRepository)(implicit ec: ExecutionContext) extends AbstractController(cc){
 
   def addCart = Action {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def addCartHandle(id: Long) = Action {
+  def addCartHandle(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
-  def updateCart(id: Long) = Action {
+  def updateCart(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
@@ -22,15 +25,18 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def deleteCart(id: Long) = Action {
+  def deleteCart(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
-  def getCart(id: Long) = Action {
-    Ok(views.html.index("Your new application is ready. Id: " + id))
+  def getCart(id: Int) = Action.async { implicit request =>
+    cartRepository.getByIdOption(id).map {
+      case Some(c) => Ok(views.html.cart(c))
+      case None => Redirect(routes.CartController.getAllCarts())
+    }
   }
 
-  def getAllCarts = Action {
-    Ok(views.html.index("asd"))
+  def getAllCarts = Action.async { implicit request =>
+    cartRepository.list().map(carts => Ok(views.html.carts(carts)))
   }
 }

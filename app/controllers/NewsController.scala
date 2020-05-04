@@ -1,21 +1,24 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+import models.NewsRepository
 import play.api.mvc.{AbstractController, ControllerComponents}
+
+import scala.concurrent.ExecutionContext
 
 
 @Singleton
-class NewsController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class NewsController @Inject()(cc: ControllerComponents, newsRepository: NewsRepository)(implicit ec: ExecutionContext) extends AbstractController(cc){
 
   def addNews = Action {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def addNewsHandle(id: Long) = Action {
+  def addNewsHandle(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
-  def updateNews(id: Long) = Action {
+  def updateNews(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
@@ -23,15 +26,18 @@ class NewsController @Inject()(cc: ControllerComponents) extends AbstractControl
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def deleteNews(id: Long) = Action {
+  def deleteNews(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
-  def getNews(id: Long) = Action {
-    Ok(views.html.index("Your new application is ready. Id: " + id))
+  def getNews(id: Int) = Action.async { implicit request =>
+    newsRepository.getByIdOption(id).map {
+      case Some(n) => Ok(views.html.news(n))
+      case None => Redirect(routes.NewsController.getAllNews())
+    }
   }
 
-  def getAllNews = Action {
-    Ok(views.html.index("asd"))
+  def getAllNews = Action.async { implicit request =>
+    newsRepository.list().map(newsList => Ok(views.html.newslist(newsList)))
   }
 }

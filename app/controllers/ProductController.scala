@@ -1,20 +1,24 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import models._
+import play.api.mvc._
+
+import scala.concurrent.{ExecutionContext, Future}
+
 
 @Singleton
-class ProductController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class ProductController @Inject()(cc: ControllerComponents, productRepository: ProductRepository)(implicit ec: ExecutionContext) extends AbstractController(cc){
 
   def addProduct = Action {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def addProductHandle(id: Long) = Action {
+  def addProductHandle(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
-  def updateProduct(id: Long) = Action {
+  def updateProduct(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
@@ -22,15 +26,18 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def deleteProduct(id: Long) = Action {
+  def deleteProduct(id: Int) = Action {
     Ok(views.html.index("Your new application is ready. Id: " + id))
   }
 
-  def getProduct(id: Long) = Action {
-    Ok(views.html.index("Your new application is ready. Id: " + id))
+  def getProduct(id: Int) = Action.async { implicit request =>
+    productRepository.getByIdOption(id).map {
+        case Some(p) => Ok(views.html.product(p))
+        case None => Redirect(routes.ProductController.getAllProducts())
+      }
   }
 
-  def getAllProducts = Action {
-    Ok(views.html.index("asd"))
+  def getAllProducts = Action.async { implicit request =>
+    productRepository.list().map(prod => Ok(views.html.products(prod)))
   }
 }

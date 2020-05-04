@@ -1,0 +1,5 @@
+@(product: Product)
+Name: @product.name
+<br>Description: @product.description
+<br>Price: @product.price
+<br>Category: <a href="@controllers.routes.CategoryController.getCategory(product.category)">@product.category</a>
