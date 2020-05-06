@@ -1,10 +1,12 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models._
+import models.category.{Category, CategoryRepository}
+import models.product.{CreateProduct, Product, ProductRepository}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.format.Formats._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,6 +35,49 @@ class ProductController @Inject()(cc: MessagesControllerComponents, productRepos
     )(UpdateProductForm.apply)(UpdateProductForm.unapply)
   }
 
+  def getAllProductsJson(): Action[AnyContent] = Action.async {
+    productRepository.list()
+      .map(products => Json.toJson(products))
+      .map(jsonProducts => Ok(jsonProducts))
+  }
+
+  def getProductsByIdJson(id: Int): Action[AnyContent] = Action.async {
+    productRepository.getByIdOption(id)
+      .map {
+        case Some(p) => Ok(Json.toJson(p))
+        case None => NotFound
+      }
+  }
+
+  def addProductJson: Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val createProductJson = json.as[CreateProduct]
+
+    categoryRepository.getById(createProductJson.category).flatMap(category =>
+      productRepository.create(createProductJson.name, createProductJson.description, createProductJson.price, category.id).map(
+        createdProduct => Created(Json.toJson(createdProduct))
+      )
+    )
+  }
+
+  def updateProductJson(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val updateProductJson = json.as[Product]
+
+    categoryRepository.getById(updateProductJson.category).flatMap(_ =>
+      productRepository.getById(id).flatMap(product =>
+        productRepository.update(product.id, updateProductJson).map(
+          updatedProduct => Ok(Json.toJson(updatedProduct))
+        )
+      )
+    )
+  }
+
+  def deleteProductJson(id: Int): Action[AnyContent] = Action.async {
+    productRepository.delete(id)
+    Future(NoContent)
+  }
+
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }
@@ -43,8 +88,8 @@ class ProductController @Inject()(cc: MessagesControllerComponents, productRepos
   }
 
   def addProductHandle = Action.async { implicit request =>
-    var categ:Seq[Category] = Seq[Category]()
-    val categories = categoryRepository.list().onComplete{
+    var categ: Seq[Category] = Seq[Category]()
+    val categories = categoryRepository.list().onComplete {
       case Success(cat) => categ = cat
       case Failure(_) => print("fail")
     }
@@ -80,8 +125,8 @@ class ProductController @Inject()(cc: MessagesControllerComponents, productRepos
   }
 
   def updateProductHandle = Action.async { implicit request =>
-    var categ:Seq[Category] = Seq[Category]()
-    val categories = categoryRepository.list().onComplete{
+    var categ: Seq[Category] = Seq[Category]()
+    val categories = categoryRepository.list().onComplete {
       case Success(cat) => categ = cat
       case Failure(_) => print("fail")
     }
@@ -119,4 +164,5 @@ class ProductController @Inject()(cc: MessagesControllerComponents, productRepos
 }
 
 case class CreateProductForm(name: String, description: String, price: Double, category: Int)
+
 case class UpdateProductForm(id: Int, name: String, description: String, price: Double, category: Int)

@@ -1,7 +1,7 @@
-package models
-
+package models.client
 
 import javax.inject.{Inject, Singleton}
+import models.address.AddressRepository
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -55,9 +55,9 @@ class ClientRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, val a
 
   def delete(id: Int): Future[Unit] = db.run(client.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_client: Client): Future[Unit] = {
+  def update(id: Int, new_client: Client): Future[Client] = {
     val clientToUpdate: Client = new_client.copy(id)
-    db.run(client.filter(_.id === id).update(clientToUpdate)).map(_ => ())
+    db.run(client.filter(_.id === id).update(clientToUpdate)).map(_ => new_client)
   }
 }
 

@@ -1,17 +1,17 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.{News, NewsRepository}
-import play.api.mvc._
+import models.news.{CreateNews, News, NewsRepository}
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.format.Formats._
+import play.api.libs.json.Json
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class NewsController @Inject()(cc: MessagesControllerComponents, newsRepository: NewsRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc){
+class NewsController @Inject()(cc: MessagesControllerComponents, newsRepository: NewsRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val createNewsForm: Form[CreateNewsForm] = Form {
     mapping(
@@ -24,6 +24,45 @@ class NewsController @Inject()(cc: MessagesControllerComponents, newsRepository:
       "id" -> number,
       "message" -> nonEmptyText
     )(UpdateNewsForm.apply)(UpdateNewsForm.unapply)
+  }
+
+  def getAllNewsJson(): Action[AnyContent] = Action.async {
+    newsRepository.list()
+      .map(news => Json.toJson(news))
+      .map(jsonNews => Ok(jsonNews))
+  }
+
+  def getNewsByIdJson(id: Int): Action[AnyContent] = Action.async {
+    newsRepository.getByIdOption(id)
+      .map {
+        case Some(n) => Ok(Json.toJson(n))
+        case None => NotFound
+      }
+  }
+
+  def addNewsJson: Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val createNewsJson = json.as[CreateNews]
+
+    newsRepository.create(createNewsJson.message).map(
+      createdNews => Created(Json.toJson(createdNews))
+    )
+  }
+
+  def updateNewsJson(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val updateNewsJson = json.as[News]
+
+    newsRepository.getById(id).flatMap(existingNews =>
+      newsRepository.update(existingNews.id, updateNewsJson).map(
+        updatedNews => Ok(Json.toJson(updatedNews))
+      )
+    )
+  }
+
+  def deleteNewsJson(id: Int): Action[AnyContent] = Action.async {
+    newsRepository.delete(id)
+    Future(NoContent)
   }
 
   def addNews = Action.async { implicit request =>
@@ -88,4 +127,5 @@ class NewsController @Inject()(cc: MessagesControllerComponents, newsRepository:
 }
 
 case class CreateNewsForm(message: String)
+
 case class UpdateNewsForm(id: Int, message: String)

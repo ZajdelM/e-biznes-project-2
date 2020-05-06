@@ -1,5 +1,4 @@
-package models
-
+package models.shipment
 
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
@@ -45,9 +44,9 @@ class ShipmentRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(imp
 
   def delete(id: Int): Future[Unit] = db.run(shipment.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_shipment: Shipment): Future[Unit] = {
+  def update(id: Int, new_shipment: Shipment): Future[Shipment] = {
     val shipmentToUpdate: Shipment = new_shipment.copy(id)
-    db.run(shipment.filter(_.id === id).update(shipmentToUpdate)).map(_ => ())
+    db.run(shipment.filter(_.id === id).update(shipmentToUpdate)).map(_ => new_shipment)
   }
 }
 

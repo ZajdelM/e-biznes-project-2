@@ -1,6 +1,6 @@
-package models
+package models.address
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -46,8 +46,8 @@ class AddressRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 
   def delete(id: Int): Future[Unit] = db.run(address.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_address: Address): Future[Unit] = {
+  def update(id: Int, new_address: Address): Future[Address] = {
     val productToUpdate: Address = new_address.copy(id)
-    db.run(address.filter(_.id === id).update(productToUpdate)).map(_ => ())
+    db.run(address.filter(_.id === id).update(productToUpdate)).map(_ => new_address)
   }
 }

@@ -1,4 +1,4 @@
-package models
+package models.category
 
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
@@ -44,8 +44,8 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
 
   def delete(id: Int): Future[Unit] = db.run(category.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_category: Category): Future[Unit] = {
+  def update(id: Int, new_category: Category): Future[Category] = {
     val categoryToUpdate: Category = new_category.copy(id)
-    db.run(category.filter(_.id === id).update(categoryToUpdate)).map(_ => ())
+    db.run(category.filter(_.id === id).update(categoryToUpdate)).map(_ => new_category)
   }
 }

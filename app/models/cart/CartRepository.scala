@@ -1,6 +1,8 @@
-package models
+package models.cart
 
 import javax.inject.{Inject, Singleton}
+import models.client.ClientRepository
+import models.product.ProductRepository
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -25,8 +27,8 @@ class CartRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, val pro
     def * = (id, product, quantity, client) <> ((Cart.apply _).tupled, Cart.unapply)
   }
 
-  import productRepository.ProductTable
   import clientRepository.ClientTable
+  import productRepository.ProductTable
 
   private val cart = TableQuery[CartTable]
   private val cli = TableQuery[ClientTable]
@@ -57,8 +59,8 @@ class CartRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, val pro
 
   def delete(id: Int): Future[Unit] = db.run(cart.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_cart: Cart): Future[Unit] = {
+  def update(id: Int, new_cart: Cart): Future[Cart] = {
     val cartToUpdate: Cart = new_cart.copy(id)
-    db.run(cart.filter(_.id === id).update(cartToUpdate)).map(_ => ())
+    db.run(cart.filter(_.id === id).update(cartToUpdate)).map(_ => new_cart)
   }
 }

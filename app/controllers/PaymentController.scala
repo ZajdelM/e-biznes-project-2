@@ -1,16 +1,17 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.{Payment, PaymentRepository}
-import play.api.data.format.Formats._
+import models.payment.{CreatePayment, Payment, PaymentRepository}
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.format.Formats._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc){
+class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepository: PaymentRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc) {
 
   val createPaymentForm: Form[CreatePaymentForm] = Form {
     mapping(
@@ -25,6 +26,45 @@ class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepos
       "amount" -> of(doubleFormat),
       "method" -> nonEmptyText
     )(UpdatePaymentForm.apply)(UpdatePaymentForm.unapply)
+  }
+
+  def getAllPaymentsJson(): Action[AnyContent] = Action.async {
+    paymentRepository.list()
+      .map(payments => Json.toJson(payments))
+      .map(jsonPayments => Ok(jsonPayments))
+  }
+
+  def getPaymentsByIdJson(id: Int): Action[AnyContent] = Action.async {
+    paymentRepository.getByIdOption(id)
+      .map {
+        case Some(p) => Ok(Json.toJson(p))
+        case None => NotFound
+      }
+  }
+
+  def addPaymentJson: Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val createPaymentJson = json.as[CreatePayment]
+
+    paymentRepository.create(createPaymentJson.amount, createPaymentJson.method).map(
+      createdPayment => Created(Json.toJson(createdPayment))
+    )
+  }
+
+  def updatePaymentJson(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val updatePaymentJson = json.as[Payment]
+
+    paymentRepository.getById(id).flatMap(existingPayment =>
+      paymentRepository.update(existingPayment.id, updatePaymentJson).map(
+        updatedPayment => Ok(Json.toJson(updatedPayment))
+      )
+    )
+  }
+
+  def deletePaymentJson(id: Int): Action[AnyContent] = Action.async {
+    paymentRepository.delete(id)
+    Future(NoContent)
   }
 
   def addPayment = Action.async { implicit request: MessagesRequest[AnyContent] =>
@@ -90,4 +130,5 @@ class PaymentController @Inject()(cc: MessagesControllerComponents, paymentRepos
 }
 
 case class CreatePaymentForm(amount: Double, method: String)
+
 case class UpdatePaymentForm(id: Int, amount: Double, method: String)

@@ -1,6 +1,9 @@
-package models
+package models.order
 
 import javax.inject.{Inject, Singleton}
+import models.client.ClientRepository
+import models.payment.PaymentRepository
+import models.shipment.ShipmentRepository
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -56,8 +59,8 @@ class OrderRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, val pa
 
   def delete(id: Int): Future[Unit] = db.run(order.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_order: Order): Future[Unit] = {
+  def update(id: Int, new_order: Order): Future[Order] = {
     val orderToUpdate: Order = new_order.copy(id)
-    db.run(order.filter(_.id === id).update(orderToUpdate)).map(_ => ())
+    db.run(order.filter(_.id === id).update(orderToUpdate)).map(_ => new_order)
   }
 }

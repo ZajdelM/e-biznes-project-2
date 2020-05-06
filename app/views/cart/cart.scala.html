@@ -1,3 +1,4 @@
+@import models.cart.Cart
 @(cart: Cart)
 Product: <a href="@controllers.routes.ProductController.getProduct(cart.product)">@cart.product</a>
 <br>Quantity: @cart.quantity

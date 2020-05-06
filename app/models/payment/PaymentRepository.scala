@@ -1,4 +1,4 @@
-package models
+package models.payment
 
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
@@ -50,9 +50,9 @@ class PaymentRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
   def delete(id: Int): Future[Unit] = db.run(payment.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_payment: Payment): Future[Unit] = {
+  def update(id: Int, new_payment: Payment): Future[Payment] = {
     val paymentToUpdate: Payment = new_payment.copy(id)
-    db.run(payment.filter(_.id === id).update(paymentToUpdate)).map(_ => ())
+    db.run(payment.filter(_.id === id).update(paymentToUpdate)).map(_ => new_payment)
   }
 }
 

@@ -1,6 +1,7 @@
-package models
+package models.product
 
 import javax.inject.{Inject, Singleton}
+import models.category.CategoryRepository
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -62,8 +63,8 @@ class ProductRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, val 
 
   def delete(id: Int): Future[Unit] = db.run(product.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_product: Product): Future[Unit] = {
+  def update(id: Int, new_product: Product): Future[Product] = {
     val productToUpdate: Product = new_product.copy(id)
-    db.run(product.filter(_.id === id).update(productToUpdate)).map(_ => ())
+    db.run(product.filter(_.id === id).update(productToUpdate)).map(_ => new_product)
   }
 }

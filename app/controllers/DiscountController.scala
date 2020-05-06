@@ -1,10 +1,13 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.{Discount, DiscountRepository, Product, ProductRepository}
+import models.discount.{CreateDiscount, Discount, DiscountRepository}
+import models.product
+import models.product.ProductRepository
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -27,13 +30,57 @@ class DiscountController @Inject()(cc: MessagesControllerComponents, discountRep
     )(UpdateDiscountForm.apply)(UpdateDiscountForm.unapply)
   }
 
+  def getAllDiscountsJson(): Action[AnyContent] = Action.async {
+    discountRepository.list()
+      .map(discounts => Json.toJson(discounts))
+      .map(jsonDiscounts => Ok(jsonDiscounts))
+  }
+
+  def getDiscountByIdJson(id: Int): Action[AnyContent] = Action.async {
+    discountRepository.getByIdOption(id)
+      .map {
+        case Some(d) => Ok(Json.toJson(d))
+        case None => NotFound
+      }
+  }
+
+  def addDiscountJson: Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val createDiscountJson = json.as[CreateDiscount]
+
+    productRepository.getById(createDiscountJson.product).flatMap(product =>
+      discountRepository.create(createDiscountJson.discountSize, product.id).map(
+        createdDiscount => Created(Json.toJson(createdDiscount))
+      )
+    )
+  }
+
+
+  def updateDiscountJson(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val updateDiscountJson = json.as[Discount]
+
+    productRepository.getById(updateDiscountJson.product).flatMap(_ =>
+      discountRepository.getById(id).flatMap(client =>
+        discountRepository.update(client.id, updateDiscountJson).map(
+          updatedDiscount => Ok(Json.toJson(updatedDiscount))
+        )
+      )
+    )
+  }
+
+  def deleteDiscountJson(id: Int): Action[AnyContent] = Action.async {
+    discountRepository.delete(id)
+    Future(NoContent)
+  }
+
   def addDiscount = Action.async { implicit request: MessagesRequest[AnyContent] =>
     val products = productRepository.list()
     products.map(prod => Ok(views.html.discount.discountAdd(createDiscountForm, prod)))
   }
 
   def addDiscountHandle  = Action.async { implicit request =>
-    var prods:Seq[Product] = Seq[Product]()
+    var prods:Seq[product.Product] = Seq[product.Product]()
     val products = productRepository.list().onComplete{
       case Success(prod) => prods = prod
       case Failure(_) => print("fail")
@@ -54,7 +101,7 @@ class DiscountController @Inject()(cc: MessagesControllerComponents, discountRep
   }
 
   def updateDiscount(id: Int) = Action.async { implicit request: MessagesRequest[AnyContent] =>
-    var products: Seq[Product] = Seq[Product]()
+    var products: Seq[product.Product] = Seq[product.Product]()
     productRepository.list().onComplete {
       case Success(prod) => products = prod
       case Failure(_) => print("fail")
@@ -70,7 +117,7 @@ class DiscountController @Inject()(cc: MessagesControllerComponents, discountRep
   }
 
   def updateDiscountHandle = Action.async { implicit request =>
-    var prod:Seq[Product] = Seq[Product]()
+    var prod:Seq[product.Product] = Seq[product.Product]()
     val products = productRepository.list().onComplete{
       case Success(prods) => prod = prods
       case Failure(_) => print("fail")

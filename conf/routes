@@ -1,15 +1,9 @@
 
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
-# An example controller showing a sample home page
 GET     /                           controllers.ProductController.index
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-# Address routing
+### Address routing ###
 GET     /address/add                controllers.AddressController.addAddress
 POST    /address/addhandle          controllers.AddressController.addAddressHandle
 GET     /address/update/:id         controllers.AddressController.updateAddress(id: Int)
@@ -18,7 +12,15 @@ GET     /address/delete/:id         controllers.AddressController.deleteAddress(
 GET     /address/all                controllers.AddressController.getAllAddresses
 GET     /address/:id                controllers.AddressController.getAddress(id: Int)
 
-# Cart routing
+# Address json routng #
+
+GET     /address/all/json           controllers.AddressController.getAllAddressesJson
+GET     /address/:id/json           controllers.AddressController.getAddressByIdJson(id: Int)
+DELETE  /address/:id/json           controllers.AddressController.deleteAddressJson(id: Int)
+POST    /address/add/json           controllers.AddressController.addAddressJson
+PUT     /address/update/:id/json    controllers.AddressController.updateAddressJson(id: Int)
+
+### Cart routing ###
 GET     /cart/add                   controllers.CartController.addCart
 POST    /cart/addhandle             controllers.CartController.addCartHandle
 GET     /cart/update/:id            controllers.CartController.updateCart(id: Int)
@@ -27,7 +29,15 @@ GET     /cart/delete/:id            controllers.CartController.deleteCart(id: In
 GET     /cart/all                   controllers.CartController.getAllCarts
 GET     /cart/:id                   controllers.CartController.getCart(id: Int)
 
-# Category routing
+# Cart json routng #
+
+GET     /cart/all/json              controllers.CartController.getAllCartsJson
+GET     /cart/:id/json              controllers.CartController.getCartByIdJson(id: Int)
+DELETE  /cart/:id/json              controllers.CartController.deleteCartJson(id: Int)
+POST    /cart/add/json              controllers.CartController.addCartJson
+PUT     /cart/update/:id/json       controllers.CartController.updateCartJson(id: Int)
+
+### Category routing ###
 GET     /category/add               controllers.CategoryController.addCategory
 POST    /category/addhandle         controllers.CategoryController.addCategoryHandle
 GET     /category/update/:id        controllers.CategoryController.updateCategory(id: Int)
@@ -36,7 +46,32 @@ GET     /category/delete/:id        controllers.CategoryController.deleteCategor
 GET     /category/all               controllers.CategoryController.getAllCategories
 GET     /category/:id               controllers.CategoryController.getCategory(id: Int)
 
-# Discount routing
+# Category json routng #
+
+GET     /category/all/json          controllers.CategoryController.getAllCategoriesJson
+GET     /category/:id/json          controllers.CategoryController.getCategoryByIdJson(id: Int)
+DELETE  /category/:id/json          controllers.CategoryController.deleteCategoryJson(id: Int)
+POST    /category/add/json          controllers.CategoryController.addCategoryJson
+PUT     /category/update/:id/json   controllers.CategoryController.updateCategoryJson(id: Int)
+
+### Client routing ###
+GET     /client/add                   controllers.ClientController.addClient
+POST    /client/addhandle             controllers.ClientController.addClientHandle
+GET     /client/update/:id            controllers.ClientController.updateClient(id: Int)
+POST    /client/updatehandle          controllers.ClientController.updateClientHandle
+GET     /client/delete/:id            controllers.ClientController.deleteClient(id: Int)
+GET     /client/all                   controllers.ClientController.getAllClients
+GET     /client/:id                   controllers.ClientController.getClient(id: Int)
+
+# Client json routng #
+
+GET     /client/all/json              controllers.ClientController.getAllClientsJson
+GET     /client/:id/json              controllers.ClientController.getClientByIdJson(id: Int)
+DELETE  /client/:id/json              controllers.ClientController.deleteClientJson(id: Int)
+POST    /client/add/json              controllers.ClientController.addClientJson
+PUT     /client/update/:id/json       controllers.ClientController.updateClientJson(id: Int)
+
+### Discount routing ##
 GET     /discount/add               controllers.DiscountController.addDiscount
 POST    /discount/addhandle         controllers.DiscountController.addDiscountHandle
 GET     /discount/update/:id        controllers.DiscountController.updateDiscount(id: Int)
@@ -45,7 +80,15 @@ GET     /discount/delete/:id        controllers.DiscountController.deleteDiscoun
 GET     /discount/all               controllers.DiscountController.getAllDiscounts
 GET     /discount/:id               controllers.DiscountController.getDiscount(id: Int)
 
-# News routing
+# Discount json routng #
+
+GET     /discount/all/json          controllers.DiscountController.getAllDiscountsJson
+GET     /discount/:id/json          controllers.DiscountController.getDiscountByIdJson(id: Int)
+DELETE  /discount/:id/json          controllers.DiscountController.deleteDiscountJson(id: Int)
+POST    /discount/add/json          controllers.DiscountController.addDiscountJson
+PUT     /discount/update/:id/json   controllers.DiscountController.updateDiscountJson(id: Int)
+
+### News routing ##
 GET     /news/add                   controllers.NewsController.addNews
 POST    /news/addhandle             controllers.NewsController.addNewsHandle
 GET     /news/update/:id            controllers.NewsController.updateNews(id: Int)
@@ -54,7 +97,15 @@ GET     /news/delete/:id            controllers.NewsController.deleteNews(id: In
 GET     /news/all                   controllers.NewsController.getAllNews
 GET     /news/:id                   controllers.NewsController.getNews(id: Int)
 
-# Order routing
+# News json routng #
+
+GET     /news/all/json              controllers.NewsController.getAllNewsJson
+GET     /news/:id/json              controllers.NewsController.getNewsByIdJson(id: Int)
+DELETE  /news/:id/json              controllers.NewsController.deleteNewsJson(id: Int)
+POST    /news/add/json              controllers.NewsController.addNewsJson
+PUT     /news/update/:id/json       controllers.NewsController.updateNewsJson(id: Int)
+
+### Order routing ###
 GET     /order/add                  controllers.OrderController.addOrder
 POST    /order/addhandle            controllers.OrderController.addOrderHandle
 GET     /order/update/:id           controllers.OrderController.updateOrder(id: Int)
@@ -63,7 +114,15 @@ GET     /order/delete/:id           controllers.OrderController.deleteOrder(id: 
 GET     /order/all                  controllers.OrderController.getAllOrders
 GET     /order/:id                  controllers.OrderController.getOrder(id: Int)
 
-# Payment routing
+# Order json routng #
+
+GET     /order/all/json             controllers.OrderController.getAllOrdersJson
+GET     /order/:id/json             controllers.OrderController.getOrderByIdJson(id: Int)
+DELETE  /order/:id/json             controllers.OrderController.deleteOrderJson(id: Int)
+POST    /order/add/json             controllers.OrderController.addOrderJson
+PUT     /order/update/:id/json      controllers.OrderController.updateOrderJson(id: Int)
+
+### Payment routing ###
 GET     /payment/add                controllers.PaymentController.addPayment
 POST    /payment/addhandle          controllers.PaymentController.addPaymentHandle
 GET     /payment/update/:id         controllers.PaymentController.updatePayment(id: Int)
@@ -72,8 +131,15 @@ GET     /payment/delete/:id         controllers.PaymentController.deletePayment(
 GET     /payment/all                controllers.PaymentController.getAllPayments
 GET     /payment/:id                controllers.PaymentController.getPayment(id: Int)
 
+# Payment json routng #
 
-# Product routing
+GET     /payment/all/json           controllers.PaymentController.getAllPaymentsJson
+GET     /payment/:id/json           controllers.PaymentController.getPaymentsByIdJson(id: Int)
+DELETE  /payment/:id/json           controllers.PaymentController.deletePaymentJson(id: Int)
+POST    /payment/add/json           controllers.PaymentController.addPaymentJson
+PUT     /payment/update/:id/json    controllers.PaymentController.updatePaymentJson(id: Int)
+
+### Product routing ###
 GET     /product/add                controllers.ProductController.addProduct
 POST    /product/addhandle          controllers.ProductController.addProductHandle
 GET     /product/update/:id         controllers.ProductController.updateProduct(id: Int)
@@ -82,7 +148,15 @@ GET     /product/delete/:id         controllers.ProductController.deleteProduct(
 GET     /product/all                controllers.ProductController.getAllProducts
 GET     /product/:id                controllers.ProductController.getProduct(id: Int)
 
-# Shipment routing
+# Product json routng #
+
+GET     /product/all/json           controllers.ProductController.getAllProductsJson
+GET     /product/:id/json           controllers.ProductController.getProductsByIdJson(id: Int)
+DELETE  /product/:id/json           controllers.ProductController.deleteProductJson(id: Int)
+POST    /product/add/json           controllers.ProductController.addProductJson
+PUT     /product/update/:id/json    controllers.ProductController.updateProductJson(id: Int)
+
+### Shipment routing ###
 GET     /shipment/add               controllers.ShipmentController.addShipment
 POST    /shipment/addhandle         controllers.ShipmentController.addShipmentHandle
 GET     /shipment/update/:id        controllers.ShipmentController.updateShipment(id: Int)
@@ -91,11 +165,10 @@ GET     /shipment/delete/:id        controllers.ShipmentController.deleteShipmen
 GET     /shipment/all               controllers.ShipmentController.getAllShipments
 GET     /shipment/:id               controllers.ShipmentController.getShipment(id: Int)
 
-# Client routing
-GET     /client/add                   controllers.ClientController.addClient
-POST    /client/addhandle             controllers.ClientController.addClientHandle
-GET     /client/update/:id            controllers.ClientController.updateClient(id: Int)
-POST    /client/updatehandle          controllers.ClientController.updateClientHandle
-GET     /client/delete/:id            controllers.ClientController.deleteClient(id: Int)
-GET     /client/all                   controllers.ClientController.getAllClients
-GET     /client/:id                   controllers.ClientController.getClient(id: Int)
+# Shipment json routng #
+
+GET     /shipment/all/json          controllers.ShipmentController.getAllShipmentsJson
+GET     /shipment/:id/json          controllers.ShipmentController.getShipmentByIdJson(id: Int)
+DELETE  /shipment/:id/json          controllers.ShipmentController.deleteShipmentJson(id: Int)
+POST    /shipment/add/json          controllers.ShipmentController.addShipmentJson
+PUT     /shipment/update/:id/json   controllers.ShipmentController.updateShipmentJson(id: Int)

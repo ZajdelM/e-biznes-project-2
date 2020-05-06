@@ -1,9 +1,13 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.{ClientRepository, Order, OrderRepository, PaymentRepository, ShipmentRepository}
+import models.client.ClientRepository
+import models.order.{CreateOrder, Order, OrderRepository}
+import models.payment.PaymentRepository
+import models.shipment.ShipmentRepository
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,6 +35,57 @@ class OrderController @Inject()(cc: MessagesControllerComponents,
       "payment" -> number,
       "shipment" -> number
     )(UpdateOrderForm.apply)(UpdateOrderForm.unapply)
+  }
+
+  def getAllOrdersJson(): Action[AnyContent] = Action.async {
+    orderRepository.list()
+      .map(orders => Json.toJson(orders))
+      .map(jsonOrders => Ok(jsonOrders))
+  }
+
+  def getOrderByIdJson(id: Int): Action[AnyContent] = Action.async {
+    orderRepository.getByIdOption(id)
+      .map {
+        case Some(o) => Ok(Json.toJson(o))
+        case None => NotFound
+      }
+  }
+
+  def addOrderJson: Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val createOrderJson = json.as[CreateOrder]
+
+    clientRepository.getById(createOrderJson.client).flatMap(client =>
+      paymentRepository.getById(createOrderJson.payment).flatMap(payment =>
+        shipmentRepository.getById(createOrderJson.shipment).flatMap(shipment =>
+          orderRepository.create(client.id, payment.id, shipment.id).map(
+            createdOrder => Created(Json.toJson(createdOrder))
+          )
+        )
+      )
+    )
+  }
+
+  def updateOrderJson(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val updateOrderJson = json.as[Order]
+
+    clientRepository.getById(updateOrderJson.client).flatMap(_ =>
+      paymentRepository.getById(updateOrderJson.payment).flatMap(_ =>
+        shipmentRepository.getById(updateOrderJson.shipment).flatMap(_ =>
+          orderRepository.getById(id).flatMap(order =>
+            orderRepository.update(order.id, updateOrderJson).map(
+              updatedOrder => Ok(Json.toJson(updatedOrder))
+            )
+          )
+        )
+      )
+    )
+  }
+
+  def deleteOrderJson(id: Int): Action[AnyContent] = Action.async {
+    orderRepository.delete(id)
+    Future(NoContent)
   }
 
   def addOrder = Action.async { implicit request: MessagesRequest[AnyContent] =>

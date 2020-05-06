@@ -1,6 +1,7 @@
-package models
+package models.discount
 
 import javax.inject.{Inject, Singleton}
+import models.product.ProductRepository
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
@@ -53,9 +54,9 @@ class DiscountRepository @Inject()(dbConfigProvider: DatabaseConfigProvider, val
 
   def delete(id: Int): Future[Unit] = db.run(discount.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_discount: Discount): Future[Unit] = {
+  def update(id: Int, new_discount: Discount): Future[Discount] = {
     val discountToUpdate: Discount = new_discount.copy(id)
-    db.run(discount.filter(_.id === id).update(discountToUpdate)).map(_ => ())
+    db.run(discount.filter(_.id === id).update(discountToUpdate)).map(_ => new_discount)
   }
 
 }

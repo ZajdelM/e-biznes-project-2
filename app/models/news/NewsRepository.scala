@@ -1,4 +1,4 @@
-package models
+package models.news
 
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
@@ -44,8 +44,8 @@ class NewsRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implic
 
   def delete(id: Int): Future[Unit] = db.run(news.filter(_.id === id).delete).map(_ => ())
 
-  def update(id: Int, new_news: News): Future[Unit] = {
+  def update(id: Int, new_news: News): Future[News] = {
     val newsToUpdate: News = new_news.copy(id)
-    db.run(news.filter(_.id === id).update(newsToUpdate)).map(_ => ())
+    db.run(news.filter(_.id === id).update(newsToUpdate)).map(_ => new_news)
   }
 }

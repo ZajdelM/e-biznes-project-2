@@ -1,17 +1,18 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.{Address, AddressRepository, Client, ClientRepository}
+import models.address.{Address, AddressRepository}
+import models.client.{Client, ClientRepository, CreateClient}
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 @Singleton
 class ClientController  @Inject()(cc: MessagesControllerComponents, clientRepository: ClientRepository, addressRepository: AddressRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc){
-  // TODO:  dokonczyc clienta i cart analogicznie do pozostalych, przetestowac czy wszystko dziala i potem jsony zrobic 
   val createClientForm: Form[CreateClientForm] = Form {
     mapping(
       "name" -> nonEmptyText,
@@ -27,6 +28,49 @@ class ClientController  @Inject()(cc: MessagesControllerComponents, clientReposi
       "surname" -> nonEmptyText,
       "address" -> number
     )(UpdateClientForm.apply)(UpdateClientForm.unapply)
+  }
+
+  def getAllClientsJson(): Action[AnyContent] = Action.async {
+    clientRepository.list()
+      .map(clients => Json.toJson(clients))
+      .map(jsonCLients => Ok(jsonCLients))
+  }
+
+  def getClientByIdJson(id: Int): Action[AnyContent] = Action.async {
+    clientRepository.getByIdOption(id)
+      .map {
+        case Some(c) => Ok(Json.toJson(c))
+        case None => NotFound
+      }
+  }
+
+  def addClientJson: Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val createClientJson = json.as[CreateClient]
+
+    addressRepository.getById(createClientJson.address).flatMap(address =>
+      clientRepository.create(createClientJson.name, createClientJson.surname, address.id).map(
+        createdClient => Created(Json.toJson(createdClient))
+      )
+    )
+  }
+
+  def updateClientJson(id: Int): Action[AnyContent] = Action.async { implicit request =>
+    val json = request.body.asJson.get
+    val updateClientJson = json.as[Client]
+
+    addressRepository.getById(updateClientJson.address).flatMap(_ =>
+      clientRepository.getById(id).flatMap(client =>
+        clientRepository.update(client.id, updateClientJson).map(
+          updatedClient => Ok(Json.toJson(updatedClient))
+        )
+      )
+    )
+  }
+
+  def deleteClientJson(id: Int): Action[AnyContent] = Action.async {
+    clientRepository.delete(id)
+    Future(NoContent)
   }
 
   def addClient = Action.async { implicit request: MessagesRequest[AnyContent] =>
