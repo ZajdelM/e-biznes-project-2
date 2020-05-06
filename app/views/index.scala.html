@@ -4,17 +4,24 @@
  *@
 @(message: String)
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("Welcome to Play") {
+@main("Welcome to My Shop") {
 
-    @*
-     * Get an `Html` object by calling the built-in Play welcome
-     * template and passing a `String` message.
-     *@
+    <h1>Welcome to My Shop</h1>
+
+    <p>
+        Navigation:<br>
+            <a href="@controllers.routes.AddressController.getAllAddresses()">Addresses</a><br>
+            <a href="@controllers.routes.CartController.getAllCarts()">Carts</a><br>
+            <a href="@controllers.routes.CategoryController.getAllCategories()">Categories</a><br>
+            <a href="@controllers.routes.ClientController.getAllClients()">Clients</a><br>
+            <a href="@controllers.routes.DiscountController.getAllDiscounts()">Discounts</a><br>
+            <a href="@controllers.routes.NewsController.getAllNews()">News</a><br>
+            <a href="@controllers.routes.OrderController.getAllOrders()">Orders</a><br>
+            <a href="@controllers.routes.PaymentController.getAllPayments()">Payments</a><br>
+            <a href="@controllers.routes.ProductController.getAllProducts()">Products</a><br>
+            <a href="@controllers.routes.ShipmentController.getAllShipments()">Shipments</a>
+    </p>
+
     @welcome(message, style = "scala")
 
 }

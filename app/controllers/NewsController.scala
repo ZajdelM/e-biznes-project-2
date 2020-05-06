@@ -1,43 +1,91 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import models.NewsRepository
-import play.api.mvc.{AbstractController, ControllerComponents}
+import models.{News, NewsRepository}
+import play.api.mvc._
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.data.format.Formats._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class NewsController @Inject()(cc: ControllerComponents, newsRepository: NewsRepository)(implicit ec: ExecutionContext) extends AbstractController(cc){
+class NewsController @Inject()(cc: MessagesControllerComponents, newsRepository: NewsRepository)(implicit ec: ExecutionContext) extends MessagesAbstractController(cc){
 
-  def addNews = Action {
-    Ok(views.html.index("Your new application is ready."))
+  val createNewsForm: Form[CreateNewsForm] = Form {
+    mapping(
+      "message" -> nonEmptyText
+    )(CreateNewsForm.apply)(CreateNewsForm.unapply)
   }
 
-  def addNewsHandle(id: Int) = Action {
-    Ok(views.html.index("Your new application is ready. Id: " + id))
+  val updateNewsForm: Form[UpdateNewsForm] = Form {
+    mapping(
+      "id" -> number,
+      "message" -> nonEmptyText
+    )(UpdateNewsForm.apply)(UpdateNewsForm.unapply)
   }
 
-  def updateNews(id: Int) = Action {
-    Ok(views.html.index("Your new application is ready. Id: " + id))
+  def addNews = Action.async { implicit request =>
+    Future.successful(Ok(views.html.news.newsAdd(createNewsForm)))
   }
 
-  def updateNewsHandle = Action {
-    Ok(views.html.index("Your new application is ready."))
+  def addNewsHandle = Action.async { implicit request =>
+    createNewsForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.news.newsAdd(errorForm))
+        )
+      },
+      news => {
+        newsRepository.create(news.message).map { _ =>
+          Redirect(routes.NewsController.addNews()).flashing("success" -> "news created")
+        }
+      }
+    )
+  }
+
+  def updateNews(id: Int) = Action.async { implicit request =>
+    val news = newsRepository.getById(id)
+    news.map(paym => {
+      val newsForm = updateNewsForm.fill(UpdateNewsForm(paym.id, paym.message))
+      //  id, product.name, product.description, product.category)
+      //updateProductForm.fill(prodForm)
+      Ok(views.html.news.newsUpdate(newsForm))
+    })
+  }
+
+  def updateNewsHandle = Action.async { implicit request =>
+    updateNewsForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(
+          BadRequest(views.html.news.newsUpdate(errorForm))
+        )
+      },
+      news => {
+        newsRepository.update(news.id, News(news.id, news.message)).map { _ =>
+          Redirect(routes.NewsController.updateNews(news.id)).flashing("success" -> "news updated")
+        }
+      }
+    )
   }
 
   def deleteNews(id: Int) = Action {
-    Ok(views.html.index("Your new application is ready. Id: " + id))
+    newsRepository.delete(id)
+    Redirect(routes.NewsController.getAllNews())
   }
 
   def getNews(id: Int) = Action.async { implicit request =>
     newsRepository.getByIdOption(id).map {
-      case Some(n) => Ok(views.html.news(n))
+      case Some(n) => Ok(views.html.news.news(n))
       case None => Redirect(routes.NewsController.getAllNews())
     }
   }
 
   def getAllNews = Action.async { implicit request =>
-    newsRepository.list().map(newsList => Ok(views.html.newslist(newsList)))
+    newsRepository.list().map(newsList => Ok(views.html.news.newslist(newsList)))
   }
 }
+
+case class CreateNewsForm(message: String)
+case class UpdateNewsForm(id: Int, message: String)

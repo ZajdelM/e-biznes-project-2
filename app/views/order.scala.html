@@ -1,4 +1,0 @@
-@(order: Order)
-Client: <a href="@controllers.routes.ClientController.getClient(order.client)">@order.client</a>
-<br>Payment: <a href="@controllers.routes.PaymentController.getPayment(order.payment)">@order.payment</a>
-<br>Shipment: <a href="@controllers.routes.ShipmentController.getShipment(order.shipment)">@order.shipment</a>

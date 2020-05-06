@@ -1,0 +1,4 @@
+@(client: Client)
+Full name: @client.name @client.surname
+<br>Address id: <a href="@controllers.routes.AddressController.getAddress(client.address)">@client.address</a>
+<br><a href="@controllers.routes.ClientController.getAllClients()">Clients</a><br>

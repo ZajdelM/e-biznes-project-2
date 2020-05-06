@@ -1,0 +1,16 @@
+@(news: Form[UpdateNewsForm])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(routes.NewsController.updateNewsHandle()) {
+    @helper.CSRF.formField
+    <input name="id" id="id" value="@news("id").value" type="hidden" />
+    @inputText(news("message"))
+
+    <div class="buttons">
+        <input type="submit" value="Update News"/>
+    </div>
+}
+<br><a href="@controllers.routes.NewsController.getAllNews()">News</a><br>

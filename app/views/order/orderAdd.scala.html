@@ -1,0 +1,32 @@
+@(order: Form[CreateOrderForm], clients: Seq[Client], payments: Seq[Payment], shipments: Seq[Shipment])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(routes.OrderController.addOrderHandle()) {
+    @helper.CSRF.formField
+
+    <select name="client" id="client">
+    @for(client <- clients) {
+        <option value="@client.id">@client.name @client.surname</option>
+    }
+    </select>
+
+    <select name="payment" id="payment">
+    @for(payment <- payments) {
+        <option value="@payment.id">@payment.id</option>
+    }
+    </select>
+
+    <select name="shipment" id="shipment">
+    @for(shipment <- shipments) {
+        <option value="@shipment.id">@shipment.id</option>
+    }
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Add Order"/>
+    </div>
+}
+<br><a href="@controllers.routes.OrderController.getAllOrders()">Orders</a><br>

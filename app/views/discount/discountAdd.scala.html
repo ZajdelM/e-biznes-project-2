@@ -1,0 +1,21 @@
+@(discount: Form[CreateDiscountForm], products: Seq[Product])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(routes.DiscountController.addDiscountHandle()) {
+    @helper.CSRF.formField
+    @inputText(discount("discountSize"))
+
+    <select name="product" id="product">
+    @for(product <- products){
+        <option value="@product.id">@product.name</option>
+    }
+    </select>
+
+    <div class="buttons">
+        <input type="submit" value="Add Discount"/>
+    </div>
+}
+<br><a href="@controllers.routes.DiscountController.getAllDiscounts()">Discounts</a><br>

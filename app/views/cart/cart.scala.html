@@ -1,0 +1,5 @@
+@(cart: Cart)
+Product: <a href="@controllers.routes.ProductController.getProduct(cart.product)">@cart.product</a>
+<br>Quantity: @cart.quantity
+<br>Client: <a href="@controllers.routes.ClientController.getClient(cart.client)">@cart.client</a>
+<br><a href="@controllers.routes.CartController.getAllCarts()">Carts</a><br>

@@ -1,0 +1,4 @@
+@(discount: Discount)
+Discount size: @discount.discountSize
+<br>Product: <a href="@controllers.routes.ProductController.getProduct(discount.id)">@discount.product</a>
+<br><a href="@controllers.routes.DiscountController.getAllDiscounts()">Discounts</a><br>

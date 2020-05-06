@@ -1,0 +1,16 @@
+@(shipment: Form[CreateShipmentForm])(implicit request: MessagesRequestHeader, flash: Flash)
+
+@import helper._
+
+@flash.get("success").getOrElse("")
+
+@form(routes.ShipmentController.addShipmentHandle()) {
+    @helper.CSRF.formField
+    @inputText(shipment("method"))
+    @inputText(shipment("status"))
+
+    <div class="buttons">
+        <input type="submit" value="Add Shipment"/>
+    </div>
+}
+<br><a href="@controllers.routes.ShipmentController.getAllShipments()">Shipments</a><br>

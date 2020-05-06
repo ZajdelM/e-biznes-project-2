@@ -1,0 +1,4 @@
+@(address: Address)
+Address: @address.street @address.building
+<br>@address.postalCode @address.city
+<br><a href="@controllers.routes.AddressController.getAllAddresses()">Addresses</a><br>

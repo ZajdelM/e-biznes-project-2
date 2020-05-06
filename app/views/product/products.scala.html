@@ -1,0 +1,24 @@
+@(products: Seq[Product])
+
+<table>
+    <tr>
+        <th id="name">Name</th>
+        <th id="price">Price</th>
+        <th id="category">Category</th>
+        <th id="actions">Actions</th>
+    </tr>
+    @for(product <- products) {
+        <tr>
+            <td>@product.name</td>
+            <td>@product.price</td>
+            <td><a href="@controllers.routes.CategoryController.getCategory(product.category)">@product.category</a></td>
+            <td>
+                <a href="@controllers.routes.ProductController.getProduct(product.id)">View</a>
+                <a href="@controllers.routes.ProductController.updateProduct(product.id)">Update</a>
+                <a href="@controllers.routes.ProductController.deleteProduct(product.id)">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+<br><a href="@controllers.routes.ProductController.addProduct()">Add Product</a>
+<br><a href="@controllers.routes.ProductController.index()">Index</a><br>
